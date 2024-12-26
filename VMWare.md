@@ -83,3 +83,4 @@ cmd.exe /k powershell -NoProfile -ExecutionPolicy Bypass -File "P:\vms\Fedora\op
 ```
 
 
+![image](https://github.com/user-attachments/assets/7c0002cb-3de8-4437-b0a1-74840aeab0c7)
