@@ -21,9 +21,31 @@ ssh-copy-id HOSTNAME
 ```
 
 ## Windows Terminal配置
+使用WindowsTerminal
+
+
+打开 设置>打开JSON文件
+
+"profiles"  > "list" 添加profile
+```json
+{
+                "commandline": "ssh HOSTNAME",
+                "guid": "{eadf7af9-2574-41c2-840f-b0afa915ce18}",
+                "hidden": false,
+                "icon": "C:\\Users\\USERNAME\\Pictures\\icons8-fedora-96.png",
+                "name": "Fedora"
+            },
+```
 
 # 2.映射Windows文件夹到 Linux
 vm-fuese
 
 # 3.映射Linux根目录到Windows
 NFS
+# 4. Windows下 添加 文件夹空白处右键在Linux中打开
+## 脚本
+
+## 注册表
+
+
+
