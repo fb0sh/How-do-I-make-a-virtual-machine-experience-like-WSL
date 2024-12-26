@@ -5,6 +5,8 @@
 建议虚拟机用户名和Windows保持一致
 
 并往hosts文件里写入 对应主机名 HOSTNAME 和 IP
+
+已安装vmtools
 ## ssh服务器配置
 ```bash
 openssh-server
@@ -38,7 +40,43 @@ ssh-copy-id HOSTNAME
 ```
 
 # 2.映射Windows文件夹到 Linux
-vm-fuese
+## 配置Vmware 文件夹共享
+![image](https://github.com/user-attachments/assets/2893c69f-d718-4e4e-9799-ca23acdd3eea)
+## 创建对应磁盘文件夹
+```bash
+sudo mkdir /mnt/c /mnt/d /mnt/p
+```
+## 创建自动挂载服务
+### 脚本
+```bash
+#!/bin/bash
+# /mnt/mount-win.sh
+vmhgfs-fuse .host:/C /mnt/c -o allow_other
+vmhgfs-fuse .host:/D /mnt/d -o allow_other
+vmhgfs-fuse .host:/P /mnt/p -o allow_other
+exit 0
+```
+### 服务文件
+`/etc/systemd/system/mount_win.service`
+```bash
+[Unit]
+Description=Mount VMware Shared Folder at Boot
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/mnt/mount-win.sh
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
+```
+### 启动挂载服务
+```bash
+sudo systemctl daemon-reload
+sudo systemctl start mount_win.service
+sudo systemctl enable mount_win.service
+```
 
 # 3.映射Linux根目录到Windows
 NFS
