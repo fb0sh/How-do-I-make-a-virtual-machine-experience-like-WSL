@@ -48,9 +48,9 @@ sudo mkdir /mnt/c /mnt/d /mnt/p
 ```
 ## 创建自动挂载服务
 ### 脚本
+`/mnt/mount-win.sh`
 ```bash
 #!/bin/bash
-# /mnt/mount-win.sh
 vmhgfs-fuse .host:/C /mnt/c -o allow_other
 vmhgfs-fuse .host:/D /mnt/d -o allow_other
 vmhgfs-fuse .host:/P /mnt/p -o allow_other
@@ -79,7 +79,37 @@ sudo systemctl enable mount_win.service
 ```
 
 # 3.映射Linux根目录到Windows
-NFS
+## 安装Samba
+`sudo dnf install samba samba-client samba-common`
+## 配置Samba
+`/etc/samba/smb.conf`
+添加以下内容
+```bash
+[root]
+        comment = Share For Windows
+        path = /
+        browsable = yes
+        read only = no
+        guest ok = yes
+        public = yes
+        create mask = 0775
+        directory mask = 0775
+```
+## 启动Samba服务
+```bash
+  sudo smbpasswd -a fb0sh
+  sudo smbpasswd -e fb0sh
+
+  sudo systemctl restart smb
+  sudo systemctl restart nmb
+  sudo firewall-cmd --permanent --add-service=samba
+  sudo firewall-cmd --reload
+```
+## 映射为Windows网络驱动器
+
+![image](https://github.com/user-attachments/assets/29aae32c-10e8-4d73-bd34-542fbdf3a53e)
+
+
 # 4. Windows下 添加 文件夹空白处右键在Linux中打开
 ## 脚本
 ```powershell
