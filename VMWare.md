@@ -34,7 +34,7 @@ ssh-copy-id HOSTNAME
                 "hidden": false,
                 "icon": "C:\\Users\\USERNAME\\Pictures\\icons8-fedora-96.png",
                 "name": "Fedora"
-            },
+}
 ```
 
 # 2.映射Windows文件夹到 Linux
@@ -44,8 +44,42 @@ vm-fuese
 NFS
 # 4. Windows下 添加 文件夹空白处右键在Linux中打开
 ## 脚本
+```powershell
+# HKEY_CLASSES_ROOT\Directory\Background\shell\OpenInFedora\command
+# cmd.exe /k powershell -NoProfile -ExecutionPolicy Bypass -File "P:\vms\Fedora\open_path.ps1" -WindowsPath "%V"
+param (
+    [string]$WindowsPath
+)
+function Convert-PathToLinuxStyle {
+    param (
+        [string]$path
+    )
+    
+    # 将路径中的反斜杠替换为正斜杠
+    $path = $path -replace '\\', '/'
 
+    # 将驱动器字母转换为小写并替换冒号
+    $driveLetter = ($path -split ':')[0].ToLower()
+    
+    # 替换路径中的驱动器字母部分
+    $linuxPath = $path -replace "^[a-zA-Z]:", "/mnt/$driveLetter"
+    
+    return $linuxPath
+}
+# 将 Windows 路径转换为 WSL 格式
+$WSLPath =Convert-PathToLinuxStyle -path $WindowsPath
+
+# 输出转换后的路径（用于调试）
+Write-Host "Converted Path: $WSLPath"
+
+# 执行 SSH 命令
+ssh -t HOSTNAME "cd $WSLPath && /usr/bin/bash"
+```
 ## 注册表
-
+```cmd
+HKEY_CLASSES_ROOT\Directory\Background\shell\OpenInFedora\
+HKEY_CLASSES_ROOT\Directory\Background\shell\OpenInFedora\command
+cmd.exe /k powershell -NoProfile -ExecutionPolicy Bypass -File "P:\vms\Fedora\open_path.ps1" -WindowsPath "%V"
+```
 
 
