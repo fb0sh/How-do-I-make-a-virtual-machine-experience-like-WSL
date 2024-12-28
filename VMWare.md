@@ -152,3 +152,11 @@ cmd.exe /k powershell -NoProfile -ExecutionPolicy Bypass -File "P:\vms\Fedora\op
 
 
 ![image](https://github.com/user-attachments/assets/7c0002cb-3de8-4437-b0a1-74840aeab0c7)
+
+# 开机自启动 虚拟机 后台
+`autostart.bat`
+```bash
+"C:\Program Files (x86)\VMware\VMware Workstation\vmrun.exe" -T ws start "P:\vms\Fedora\Fedora.vmx" nogui
+```
+
+创建其快捷方式， 并使用Win+r 输入shell:startup 将快捷方式拖动进去
